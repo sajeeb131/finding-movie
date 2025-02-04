@@ -1,0 +1,92 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Grandstander:ital,wght@0,100..900;1,100..900&display=swap');
+:root {
+  font-family: "Grandstander", serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #1c1c25;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+    --dark-black: #1c1c25;
+    --smoke: #c4c4c4;
+    --blue: #2a4bb3;
+    --medium-black: #25252f;
+    --black: #101016;
+    --soft-black: #3b3b44;
+    --dark-blue: #213e9a;
+    --black-blue: #1f367e;
+    --dark-red: #95234c;
+    --dark-yellow: #b58622;
+    --dark-purple: #4548a9;
+    --red: #e72a6e;
+    --yellow: #ecb236;
+    --white-smoke: #f7efdd;
+    --purple: #7174db;
+    --green: #44ac9e;
+    --dark-green: #267267;
+    --light-blue: #536cbb;
+}
+.font-medium{
+  font-family: "Grandstander", serif;
+  font-size: 2em;
+}
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}

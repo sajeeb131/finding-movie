@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Grandstander:ital,wght@0,100..900;1,100..900&display=swap');
+
+.g1-header{
+    padding-bottom: 1.8vh;
+    border-bottom: 5px solid var(--black-blue);
+}
+.g1-mid{
+    height: 40%;
+}
+.g1-mid-tv, .g1-mid-button{
+    width: 100%;
+    border-radius: 15px; 
+    padding: 15px;
+    overflow: hidden;
+}
+.g1-mid-tv-display{
+    width: 100%;
+    height: 100%;
+    background-color: var(--medium-black);
+    border-radius: 15px;
+}
+.button-slider {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+.slider-images{
+    display: flex;
+    width: 300%;
+    animation: none;
+}
+.btn-slider-img {
+    width: 80.4em;
+    height: 3em;
+}
+
+.btn-main {
+    position: absolute;
+    width: 30%;
+    height: 100%;
+    border-radius: 5px;
+    background-color: var(--green);
+    text-align: center;
+    font-size: 2em;
+    color: var(--dark-green);
+    cursor: grab;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: left 0.3s ease-out; /* Smooth transition for position */
+}
+
+.btn-main:focus {
+    outline: none;
+    border: none;
+}
+
+/* Tilt Effect when Button is Pressed */
+.btn-pressed {
+    transform: rotateY(10deg) scale(0.98);
+}
+
+/* Image Animation when Pressing or Dragging */
+.animating .slider-images {
+    animation: slideAnimation 2s linear infinite;
+}
+
+@keyframes slideAnimation {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-33.33%);
+    }
+}

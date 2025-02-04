@@ -1,0 +1,37 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  gap: 10px;
+  width: 100vw;
+  height: 100vh;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0);
+  background-image: radial-gradient(circle, rgba(229,229,229,0.03) 20%, transparent 10%), radial-gradient(circle, rgba(229,229,229,0.03) 20%, transparent 10%);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 5px;
+  padding: 20px;
+  
+}
+
+.salmon { grid-column: span 2; grid-row: span 2; }
+.broccoli { grid-column: span 4; }
+.tamago { grid-column: span 2; }
+.pork { grid-column: span 2; }
+.edamame { grid-column: span 2; }
+.tomato, .tofu, .tempura, .gyoza { grid-column: span 1; }
+
+
+.grid-child{
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
+}
