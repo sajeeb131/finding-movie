@@ -9,7 +9,6 @@ const ThirdGrid = () => {
   
   return (
     <div className=' w-full h-full g3-c' >
-        <Door/>
         <div className='w-full h-full flex flex-col gap-4 g3-main'>
             <div className='flex flex-row items-center justify-between gap-4 g3-upper'>
               <div className='flex flex-row items-center justify-between g3-upper-left'>
@@ -38,6 +37,8 @@ const ThirdGrid = () => {
               </section>
             </div>
         </div>
+        <Door/>
+
         
     </div>
   )

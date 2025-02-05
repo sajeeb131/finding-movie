@@ -11,7 +11,6 @@ const Door = () => {
     // Play unlock sound
     const unlockSound = new Audio("/audio/door.mp3.wav");
     
-
     setLocked(false);
     setTimeout(() => {
       setIsOpen(true);

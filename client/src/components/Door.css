@@ -4,9 +4,8 @@
     height: 100%;
     border-radius: 15px;
     box-shadow:  0 0 1em 0 var(--black);
-    background-color: var(--medium-black);
+    background-color: none;
     overflow: hidden;
-    z-index: 2;
 }
 
 .door-part{
@@ -67,8 +66,7 @@
 
 /* Add these new styles at the end of your existing CSS file */
 .door-open{
-  background-color: transparent;
-}
+pointer-events: none;}
 .door-open .left-door {
   
     animation: slideLeft 1.5s ease-in-out forwards;

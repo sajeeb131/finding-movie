@@ -8,7 +8,6 @@ import './FifthGrid.css'
 const FifthGrid = () => {
   return (
     <div className='w-full h-full g3-c'>
-        <Door/>
         <div className='w-full h-full flex flex-col gap-4 g3-main g5-main'>
             <div className='flex flex-row items-center justify-between gap-4 g3-upper'>
               <div className='flex flex-row items-center justify-between g5-upper-left'>
@@ -37,6 +36,8 @@ const FifthGrid = () => {
               </section>
             </div>
         </div>
+        <Door/>
+
     </div>
   )
 }
