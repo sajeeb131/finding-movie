@@ -1,0 +1,55 @@
+.g3-c{
+    position: relative;
+
+}
+
+.g3-main{
+    background-color: var(--medium-black);
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    transition: border 0.3s ease-in-out;
+    border-radius: 15px;
+    z-index: 1;
+
+    padding: 20px;
+}
+
+.g3-upper-left{
+    width: 85%;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: var(--dark-black);
+}
+.g3-upper-left-text{
+
+}
+.g3-arrow{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    transition: width 0.3s ease-in-out; 
+}
+.arrow-clicked{
+    box-shadow: none;
+}
+.g3-arrow:hover{
+    transform: scale(2);
+}
+.g3-tv{
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark-black);
+    border-radius: 8px;
+    padding: 20px;
+}
+.g3-tv-display{
+    width: 100%;
+    border-radius: 8px;
+
+}

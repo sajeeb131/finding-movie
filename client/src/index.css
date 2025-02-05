@@ -37,6 +37,10 @@
   font-family: "Grandstander", serif;
   font-size: 2em;
 }
+.font-small{
+  font-family: "Grandstander", serif;
+  font-size: 1.2em;
+}
 a {
   font-weight: 500;
   color: #646cff;

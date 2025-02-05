@@ -1,0 +1,25 @@
+.g5-c{
+    position: relative;
+}
+
+.g5-main{
+    background-color: var(--medium-black);
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    transition: border 0.3s ease-in-out;
+    border-radius: 15px;
+    z-index: 1;
+
+    padding: 20px;
+}
+
+.g5-upper-left{
+    width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: var(--dark-black);
+}
+.g5-main{
+    z-index: 10!important;
+}
