@@ -1,10 +1,10 @@
 const express = require('express')
-const { fetchMoviesByCast, fetchMovieDetails, fetchCastSuggestions} = require('../controllers/movie-controller')
+const { fetchMoviesByCast, fetchMovieDetails, getMovieDetailsFromOpenAI} = require('../controllers/movie-controller')
 
 const router = express.Router()
 
 router.get('/movies/by-cast', fetchMoviesByCast)
 router.get('/movies', fetchMovieDetails)
-// router.get('/search', fetchCastSuggestions)
+router.get('/search', getMovieDetailsFromOpenAI)
 
 module.exports = router
