@@ -27,7 +27,7 @@ const GridLayout = () => {
         </div>
         
         <div className="col-span-3 row-span-5 flex items-center justify-center bg-black  box">
-          {/* <FifthGrid /> */}
+          <FifthGrid />
         </div>
         
         <div className="col-span-2 row-span-2 flex items-center justify-center bg-black  box">
