@@ -20,9 +20,13 @@
     border-radius: 8px;
     background-color: var(--dark-black);
 }
-.g3-upper-left-text{
-
-}
+.g3-upper-left-text {
+    font-size: 16px;  /* Default font size, can be adjusted */
+    max-width: 20ch;  /* Limits the text width to 20 characters */
+    overflow: hidden;  /* Hides any text that overflows */
+    text-overflow: ellipsis;  /* Adds ellipsis (...) for overflowed text */
+    white-space: nowrap;  /* Prevents wrapping of text */
+  }
 .g3-arrow{
     display: flex;
     flex-direction: row;
@@ -38,17 +42,23 @@
     box-shadow: none;
 }
 .g3-arrow:hover{
-    transform: scale(2);
+    transform: scale(1.05);
 }
 .g3-tv{
     width: 100%;
     height: 100%;
     background-color: var(--dark-black);
     border-radius: 8px;
-    padding: 20px;
+    padding: 10px;
 }
 .g3-tv-display{
     width: 100%;
     border-radius: 8px;
+    height: 540px;
 
+}
+.poster{
+    width: 100%;
+    height: 100% !important;
+    object-fit: fill;
 }

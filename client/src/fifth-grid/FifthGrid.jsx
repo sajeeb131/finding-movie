@@ -4,8 +4,10 @@ import Door from '../components/Door';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import movie from '../assets/movie.jpeg'
 import './FifthGrid.css'
+import { useMovieContext } from '../context/MovieContext';
 
 const FifthGrid = () => {
+  const {movies, yt} = useMovieContext()
   return (
     <div className='w-full h-full g3-c'>
         <div className='w-full h-full flex flex-col gap-4 g3-main g5-main'>
@@ -23,10 +25,13 @@ const FifthGrid = () => {
               <section className='h-full g3-tv'>
                 <div className='h-full g3-tv-display'>
                   {/* movie here */}
+                  {
+                    Map.movies
+                  }
                   <iframe 
                     width="100%" 
                     height="100%" 
-                    src="https://www.youtube.com/embed/PLl99DlL6b4" 
+                    src={`https://www.youtube.com/embed/${yt}`}
                     title="YouTube video player" 
                     frameBorder="0" 
                     allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 

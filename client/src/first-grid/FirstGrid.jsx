@@ -6,8 +6,11 @@ import avatarLookingRight from '../assets/looking-right.png';
 import typingSound from '/audio/type.wav';
 import buttonSound from '/audio/button.mp3';
 import { API_URI } from '../utils/api';
+import { useMovieContext } from '../context/MovieContext';
 
 const FirstGrid = () => {
+  //access context
+  const {movies, setMovies, setYoutube } = useMovieContext();
   // Slider and backend states
   const [position, setPosition] = useState(0);
   const [isPressed, setIsPressed] = useState(false);
@@ -98,9 +101,11 @@ const FirstGrid = () => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+
       const data = await response.json();
-      setMovieData(data);
-      console.log('Movie data:', data);
+      setMovies(data.movies);
+      const videoId = data.movies[0].trailerUrl.split("v=")[1];  
+      setYoutube(videoId);
     } catch (error) {
       console.error("Error fetching movie data:", error);
     }
@@ -126,7 +131,7 @@ const FirstGrid = () => {
         window.speechSynthesis.cancel(); // Stop any ongoing speech
       
         const speakText = () => {
-          const utterance = new SpeechSynthesisUtterance("Hey, You forgot to type..hmmmmmmmmm");
+          const utterance = new SpeechSynthesisUtterance("teri ma ki chut");
           
           // 🎭 Cartoonish effect
           utterance.pitch = 1.3; 

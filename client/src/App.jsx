@@ -1,5 +1,5 @@
 import { useState } from 'react'
-
+import { MovieProvider } from './context/MovieContext'
 import './App.css'
 import GridLayout from './GridLayout/GridLayout'
 
@@ -7,7 +7,9 @@ import GridLayout from './GridLayout/GridLayout'
 function App() {
   return (
     <>
-     <GridLayout />
+    <MovieProvider>
+      <GridLayout />
+    </MovieProvider>
     </>
   )
 }

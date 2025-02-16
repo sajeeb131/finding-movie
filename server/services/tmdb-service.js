@@ -47,5 +47,59 @@ const searchPerson = async (name) => {
     }
 };
 
-module.exports = { searchMovies, searchPerson };
+
+const fetchMoviesForAllActorsTogether = async (actorNames) => {
+    const actorIds = [];
+    for (const name of actorNames) {
+        const actor = await searchPerson(name);
+        if (actor && actor.id) {
+            actorIds.push(actor.id);
+        }
+    }
+
+    if (actorIds.length > 0) {
+        return await searchMovies({ with_cast: actorIds.join(',') }); // Fetch for all actors together
+    }
+
+    return [];
+};
+
+const fetchMoviesForEachActorSeparately = async (actorNames) => {
+    let movies = [];
+    
+    for (const name of actorNames) {
+        const actor = await searchPerson(name);
+        if (actor && actor.id) {
+            const actorMovies = await searchMovies({ with_cast: actor.id });
+            movies = movies.concat(actorMovies.slice(0, 5)); // Limit to 5 per actor
+        }
+    }
+
+    return movies;
+};
+
+// Function to fetch movie trailers
+const fetchMovieTrailer = async (movieId) => {
+    try {
+        const response = await axios.get(`${TMDB_API_URL}/movie/${movieId}/videos`, {
+            params: {
+                api_key: TMDB_API_KEY
+            }
+        });
+
+        // Find the trailer from the response
+        const trailers = response.data.results.filter(video => video.type === 'Trailer' && video.site === 'YouTube');
+        if (trailers.length > 0) {
+            return `https://www.youtube.com/watch?v=${trailers[0].key}`; // Return the YouTube URL of the first trailer
+        }
+
+        return null; // No trailer found
+    } catch (error) {
+        console.error(`Error fetching trailer for movie ID ${movieId}:`, error);
+        return null; // Return null if there's an error
+    }
+};
+
+
+module.exports = { searchMovies, searchPerson, fetchMoviesForAllActorsTogether, fetchMoviesForEachActorSeparately, fetchMovieTrailer };
 
