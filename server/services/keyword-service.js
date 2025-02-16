@@ -68,8 +68,6 @@ const extractKeywords = async (prompt) => {
         keywords.releaseYear = yearMatch[0];
     }
     keywords.genre = detectGenre(prompt);
-
-    console.log('Extracted Keywords:', keywords);
     return keywords;
 };
 

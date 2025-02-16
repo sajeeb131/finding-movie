@@ -8,7 +8,10 @@ import FifthGrid from "../fifth-grid/FifthGrid";
 
 const GridLayout = () => {
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
+    <div className="flex h-screen w-screen items-center justify-center grid-container">
+      <div className="bg-image">
+        {/* background image */}
+      </div>
       <div className="grid h-full w-full gap-4 p-10 grid-cols-10 grid-rows-10">
         <div className="col-span-3 row-span-10 flex items-center justify-center bg-black  box">
           <FirstGrid />

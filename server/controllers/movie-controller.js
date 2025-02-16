@@ -1,13 +1,9 @@
-const Movie = require('../models/movie');
-const axios = require('axios');
-const Cast = require('../models/cast');
-const TMDB_API_KEY = process.env.TMDB_API_KEY;
-
 const { searchMovies, searchPerson } = require('../services/tmdb-service');
 const { extractKeywords } = require('../services/keyword-service');
 
 const processPrompt = async (req, res) => {
   const prompt = req.body.prompt;
+  console.log(prompt)
   if (!prompt) {
       return res.status(400).json({ message: 'Prompt is required' });
   }
@@ -15,17 +11,14 @@ const processPrompt = async (req, res) => {
   try {
       // Step 1: Extract keywords from the prompt
       const keywords = await extractKeywords(prompt);
-      console.log("Extracted Keywords:", keywords);
 
       const queries = {};
-
       // Step 2: Prioritize searching by movie name
       if (keywords.movieName) {
           queries.query = keywords.movieName;
       } else {
           // Step 3: Handle actor-based search (Convert Name → ID)
           if (keywords.actorNames && keywords.actorNames.length > 0) {
-            console.log('actorNames:', keywords.actorNames);
               const actor = await searchPerson(keywords.actorNames[0]);
               if (actor && actor.id) {
                   queries.with_cast = actor.id;
@@ -48,8 +41,6 @@ const processPrompt = async (req, res) => {
       // Step 6: Fetch movies based on queries
       console.log('queries:', queries);
       const movies = await searchMovies(queries);
-      console.log("Movies:", movies);
-
       res.status(200).json({ movies });
 
   } catch (error) {
