@@ -1,0 +1,56 @@
+.gc-7{
+    background-color: var(--medium-black);
+
+}
+
+.g7-main {
+  }
+  
+  .genre-display {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    border-radius: 8px;
+    color: white;
+    transition: opacity 0.5s ease-in-out; /* Smooth fade transition */
+  }
+  
+  /* Pulse animation */
+  .pulse-animation {
+    animation: pulse 2s infinite ease-in-out;
+  }
+  
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); /* Yellow pulse starting point */
+    }
+    70% {
+      box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); /* Spreads and fades */
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); /* Back to start */
+    }
+  }
+  
+  .genre-icon {
+    color: #ffd700; /* Gold color for icons */
+  }
+  
+  .genre-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+  
+  /* Optional: Fade effect for genre switching */
+  .fade-in-out {
+    animation: fadeInOut 0.5s ease-in-out;
+  }
+  
+  @keyframes fadeInOut {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+  }

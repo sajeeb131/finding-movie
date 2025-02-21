@@ -4,6 +4,7 @@ import FirstGrid from "../first-grid/FirstGrid";
 import SecondGrid from "../second-grid/SecondGrid";
 import ThirdGrid from "../third-grid/ThirdGrid";
 import FifthGrid from "../fifth-grid/FifthGrid";
+import SeventhGrid from "../seventh-grid/SeventhGrid";
 
 
 const GridLayout = () => {
@@ -17,30 +18,30 @@ const GridLayout = () => {
           <FirstGrid />
         </div>
         
-        <div className="col-span-2 row-span-2 flex items-center justify-center bg-black  box">
-          <SecondGrid />
-        </div>
-        <div className="col-span-2 row-span-2 flex items-center justify-center bg-black  box">
-          <SecondGrid />
-        </div>
-
-        <div className="col-span-3 row-span-2 flex items-center justify-center bg-black  box">
-          <SecondGrid />
+        <div className="col-span-7 row-span-2 flex items-center justify-center bg-black  box">
+          {/* <SecondGrid /> */}
         </div>
         
         
-        <div className="col-span-3 row-span-8 flex items-center justify-center bg-black  box">
+        <div className="col-span-4 row-span-6 flex items-center justify-center bg-black  box">
           <ThirdGrid />
         </div>
         
-        {/* <div className="col-span-4 row-span-3 flex items-center justify-center bg-black  box">
-          <SecondGrid />
-        </div> */}
+        <div className="col-span-3 row-span-3 flex items-center justify-center bg-black  box">
+          {/* <SecondGrid /> */}
+        </div>
         
-        <div className="col-span-4 row-span-8 flex items-center justify-center bg-black  box">
+        <div className="col-span-3 row-span-5 flex items-center justify-center bg-black  box">
           <FifthGrid />
         </div>
-
+        
+        <div className="col-span-2 row-span-2 flex items-center justify-center bg-black  box">
+          <SecondGrid />
+        </div>
+        
+        <div className="col-span-2 row-span-2 flex items-center justify-center bg-black  box">
+          <SeventhGrid />
+        </div>
         
       </div>
     </div>

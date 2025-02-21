@@ -1,9 +1,17 @@
-const { searchMovies, searchPerson, fetchMoviesForAllActorsTogether, fetchMoviesForEachActorSeparately, fetchMovieTrailer} = require('../services/tmdb-service');
+const { 
+    searchMovies, 
+    searchPerson, 
+    fetchMoviesForAllActorsTogether, 
+    fetchMoviesForEachActorSeparately, 
+    fetchMovieTrailer, 
+    searchByGenre,
+    GENRE_IDS // Import GENRE_IDS directly
+} = require('../services/tmdb-service');
 const { extractKeywords } = require('../services/keyword-service');
 
 const processPrompt = async (req, res) => {
     const prompt = req.body.prompt;
-    console.log(prompt);
+    console.log('Processing prompt:', prompt);
     if (!prompt) {
         return res.status(400).json({ message: 'Prompt is required' });
     }
@@ -11,6 +19,7 @@ const processPrompt = async (req, res) => {
     try {
         // Step 1: Extract keywords from the prompt
         const keywords = await extractKeywords(prompt);
+        console.log('Extracted keywords:', keywords);
         const queries = {};
         let movies = [];
 
@@ -20,25 +29,28 @@ const processPrompt = async (req, res) => {
         } else {
             // Step 3: Fetch movies based on actors
             if (keywords.actorNames && keywords.actorNames.length > 0) {
-                // Fetch movies using both approaches
-                // const moviesTogether = await fetchMoviesForAllActorsTogether(keywords.actorNames);
                 const moviesSeparately = await fetchMoviesForEachActorSeparately(keywords.actorNames);
-                
-                // Combine results without duplicates
-                movies = [...new Map([ ...moviesSeparately].map(m => [m.id, m])).values()];
+                movies = [...new Map([...moviesSeparately].map(m => [m.id, m])).values()];
             }
 
-            // // Step 4: Handle director-based search (Convert Name → ID)
-            // if (keywords.directorNames && keywords.directorNames.length > 0) {
-            //     const director = await searchPerson(keywords.directorNames[0]);
-            //     if (director && director.id) {
-            //         queries.with_crew = director.id;
-            //     }
-            // }
+            // Step 4: Fetch movies based on genres if no movie name or actors
+            if (movies.length === 0 && keywords.genre && keywords.genre.length > 0) {
+                const genreMovies = await searchByGenre(keywords.genre);
+                movies = [...new Map([...genreMovies.slice(0, 5)].map(m => [m.id, m])).values()];
+            }
 
             // Step 5: Add other filters if available
             if (keywords.releaseYear) queries.primary_release_year = keywords.releaseYear;
-            if (keywords.genre) queries.with_genres = keywords.genre;
+            // if (keywords.genre && keywords.genre.length > 0) {
+            //     queries.with_genres = keywords.genre
+            //         .map(genre => {
+            //             const genreId = GENRE_IDS[genre.toLowerCase()];
+            //             if (!genreId) console.warn(`Genre '${genre}' not found in GENRE_IDS`);
+            //             return genreId;
+            //         })
+            //         .filter(id => id !== undefined)
+            //         .join(',');
+            // }
         }
 
         // Step 6: Fetch movies based on other filters
@@ -46,18 +58,16 @@ const processPrompt = async (req, res) => {
             const filteredMovies = await searchMovies(queries);
             movies = [...new Map([...movies, ...filteredMovies.slice(0, 5)].map(m => [m.id, m])).values()];
         }
-        // Step 7: Fetch trailers for each movie
+
+        // Step 7: Fetch trailers and genres for each movie
         for (let i = 0; i < movies.length; i++) {
             const movie = movies[i];
-            const trailerUrl = await fetchMovieTrailer(movie.id);
-            if (trailerUrl) {
-                movies[i] = { ...movie, trailerUrl }; // Add the trailer URL to the movie object
-            }
+            const { trailerUrl, genres } = await fetchMovieTrailer(movie.id);
+            movies[i] = { ...movie, trailerUrl, genres };
         }
 
         console.log('Final movies:', movies);
         res.status(200).json({ movies });
-
     } catch (error) {
         console.error("Error processing prompt:", error);
         res.status(500).json({
@@ -67,6 +77,4 @@ const processPrompt = async (req, res) => {
     }
 };
 
-
 module.exports = { processPrompt };
-

@@ -6,8 +6,7 @@ import { MdOutlineMovieFilter } from "react-icons/md";
 import { useMovieContext } from '../context/MovieContext';
 
 const ThirdGrid = () => {
-  const { movies, setYoutube } = useMovieContext();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const { movies, setYoutube, currentIndex, setCurrentIndex } = useMovieContext();
 
   // Check if movies are available
   if (!movies || movies.length === 0) {

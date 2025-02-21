@@ -1,19 +1,18 @@
 const { GENRES } = require('../utils/constants');
 const nlp = require('compromise');
 const Fuse = require('fuse.js');
-const Cast = require('../models/cast'); // Import the Cast model
-const Movie = require('../models/movie'); // Import the Movie model
+const Cast = require('../models/cast');
+const Movie = require('../models/movie');
 
 const fuseOptions = {
     includeScore: true,
-    threshold: 0.3,
-    keys: ['name']
+    threshold: 0.4,
 };
 
-// Detect movie name from the text (using database for accurate results)
+// Detect movie name from the text
 const detectMovieName = async (text) => {
     const movies = await Movie.find({}, { title: 1, _id: 0 });
-    const movieTitles = movies.flatMap(movie => movie.title);
+    const movieTitles = movies.map(movie => movie.title);
     const fuse = new Fuse(movieTitles, fuseOptions);
     const result = fuse.search(text);
     return result.length > 0 ? result[0].item : null;
@@ -23,7 +22,6 @@ const detectMovieName = async (text) => {
 const detectCast = async (text) => {
     const doc = nlp(text);
     const people = doc.people().out('array'); 
-
     const castMembers = await Cast.find({}, { name: 1, _id: 0 });
     const actorNames = castMembers.map(member => member.name);
 
@@ -37,17 +35,26 @@ const detectCast = async (text) => {
 };
 
 // Detect genre from the text
+// Detect genre from the text (exact match only)
 const detectGenre = (text) => {
-    const fuse = new Fuse(GENRES, fuseOptions);
-    const results = fuse.search(text);
-    return results.length > 0 ? results[0].item : null;
+    const normalizedText = text.toLowerCase();
+    const words = normalizedText.split(/\s+/); // Split by whitespace
+
+    // Use Set for efficient lookup
+    const genreSet = new Set(GENRES.map(genre => genre.toLowerCase()));
+    const detectedGenres = words.filter(word => genreSet.has(word));
+
+    console.log('Words checked for genres:', words);
+    console.log('Detected genres:', detectedGenres);
+
+    return [...new Set(detectedGenres)]; // Remove duplicates
 };
 
 // Detect logical operator (and/or) in the prompt
 const detectLogicalOperator = (text) => {
-  if (text.includes('and')) return 'and';
-  if (text.includes('or')) return 'or';
-  return null; // No logical operator detected
+    if (text.toLowerCase().includes('and')) return 'and';
+    if (text.toLowerCase().includes('or')) return 'or';
+    return null;
 };
 
 // Main function to extract keywords from the prompt
@@ -57,7 +64,7 @@ const extractKeywords = async (prompt) => {
         actorNames: [],
         directorNames: [],
         releaseYear: null,
-        genre: null,
+        genre: [],
         operator: null 
     };
 
@@ -68,6 +75,9 @@ const extractKeywords = async (prompt) => {
         keywords.releaseYear = yearMatch[0];
     }
     keywords.genre = detectGenre(prompt);
+    keywords.operator = detectLogicalOperator(prompt);
+    console.log('Extracted keywords:', keywords);
+
     return keywords;
 };
 
