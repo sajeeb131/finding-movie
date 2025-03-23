@@ -9,8 +9,9 @@ import { API_URI } from '../utils/api';
 import { useMovieContext } from '../context/MovieContext';
 
 const FirstGrid = () => {
-  //access context
-  const {movies, setMovies, setYoutube } = useMovieContext();
+  // Access context including the new gameStarted state setter
+  const { setMovies, setYoutube, setGameStarted } = useMovieContext();
+
   // Slider and backend states
   const [position, setPosition] = useState(0);
   const [isPressed, setIsPressed] = useState(false);
@@ -29,7 +30,7 @@ const FirstGrid = () => {
   const [text, setText] = useState("");
   const [animatedText, setAnimatedText] = useState("");
 
-  // Avatar images
+  // Avatar image state
   const [avatarImage, setAvatarImage] = useState(avatarIdle);
   const resetAvatarTimer = useRef(null);
 
@@ -61,12 +62,10 @@ const FirstGrid = () => {
     const inputValue = e.target.value;
     if (inputValue.length <= 160) {
       setText(inputValue);
-
       if (inputValue.trim() !== "") {
         setError("");
         clearTimeout(resetAvatarTimer.current);
         setAvatarImage(avatarLookingDown);
-
         resetAvatarTimer.current = setTimeout(() => {
           setAvatarImage(avatarIdle);
         }, 1500);
@@ -85,17 +84,16 @@ const FirstGrid = () => {
   };
 
   const handleFocus = () => {
-    // Optional: set avatar to something if desired, e.g. avatarLookingDown
+    // Optional: adjust avatar on focus if needed.
   };
 
-  // Fetch movie data
+  // Fetch movie data from the backend
   const fetchMovieData = async () => {
     try {
-      console.log('')
       const response = await fetch(`${API_URI}/api/search`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({prompt: text}),
+        body: JSON.stringify({ prompt: text }),
       });
 
       if (!response.ok) {
@@ -104,19 +102,28 @@ const FirstGrid = () => {
 
       const data = await response.json();
       setMovies(data.movies);
-      const videoId = data.movies[0].trailerUrl.split("v=")[1];  
+      // Extract video id safely (assumes trailerUrl exists and has "v=")
+      const videoId = data.movies[0]?.trailerUrl.split("v=")[1];
       setYoutube(videoId);
     } catch (error) {
       console.error("Error fetching movie data:", error);
     }
   };
 
-  // Reset slider and data
+  // Reset slider, local states, and context states so the doors lock again.
   const handleReset = () => {
     setPosition(0);
     setButtonText("START");
-    setAvatarImage(avatarIdle)
+    setAvatarImage(avatarIdle);
     setMovieData(null);
+    setText("");
+    setAnimatedText("");
+    setError("");
+    // Reset context states to clear movies and YouTube video
+    setMovies(null);
+    setYoutube(null);
+    // Reset gameStarted to false so doors are locked again.
+    setGameStarted(false);
   };
 
   // Slider event handlers
@@ -129,22 +136,14 @@ const FirstGrid = () => {
     if (text.trim() === "") {
       if ("speechSynthesis" in window) {
         window.speechSynthesis.cancel(); // Stop any ongoing speech
-      
         const speakText = () => {
           const utterance = new SpeechSynthesisUtterance("teri ma ki chut");
-          
-          // 🎭 Cartoonish effect
           utterance.pitch = 1.3; 
           utterance.rate = 1.05; 
-          
-          // Wait for voices to load, then select one
           const voices = window.speechSynthesis.getVoices();
           utterance.voice = voices.find(voice => voice.name.includes("Google UK English Female")) || voices[0];
-      
           window.speechSynthesis.speak(utterance);
         };
-      
-        // Fix for voices loading asynchronously
         if (window.speechSynthesis.getVoices().length === 0) {
           window.speechSynthesis.onvoiceschanged = () => {
             speakText(); 
@@ -152,21 +151,18 @@ const FirstGrid = () => {
         } else {
           speakText(); 
         }
-      }else {
+      } else {
         console.log("Sorry, your browser does not support text to speech!");
       }
       return;
     }
 
-
     isDragging.current = true;
     setIsPressed(true);
     startX.current = e.clientX;
     startLeft.current = position;
-
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
-
     sliderRef.current.classList.add("animating");
   };
 
@@ -176,14 +172,13 @@ const FirstGrid = () => {
       const sliderWidth = sliderRef.current.offsetWidth;
       const buttonWidth = buttonRef.current.offsetWidth;
       let newPosition = startLeft.current + (e.clientX - startX.current);
-
       if (newPosition < 0) newPosition = 0;
       if (newPosition > sliderWidth - buttonWidth) newPosition = sliderWidth - buttonWidth;
-
+      // When slider reaches half width, complete the action
       if (newPosition >= sliderWidth / 2 && buttonText === "START") {
         newPosition = sliderWidth - buttonWidth;
         setPosition(newPosition);
-        setAvatarImage(avatarLookingRight)
+        setAvatarImage(avatarLookingRight);
         setButtonText("RESET");
         if (!hasPlayedEndSound.current) {
           playButtonSound();
@@ -193,6 +188,8 @@ const FirstGrid = () => {
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
         sliderRef.current.classList.remove("animating");
+        // Start the game: allow doors to unlock and fetch movie data
+        setGameStarted(true);
         fetchMovieData();
       } else {
         if (newPosition < sliderWidth - buttonWidth) {
@@ -241,18 +238,15 @@ const FirstGrid = () => {
 
       <section className='flex flex-col items-center gap-6 p-10 g1-mid'>
         <div className='h-[40vh] bg-[var(--black)] g1-mid-tv'>
-          {/* Make sure this container is relatively positioned so we can position the bubble absolutely */}
           <div className='flex items-center justify-center g1-mid-tv-display' style={{ position: 'relative' }}>
             <img 
               src={avatarImage} 
               alt="Avatar" 
               width={380} 
               height={380}
-              className='absolute z-10 '
+              className='absolute z-10'
               style={{ transition: 'all 0.3s ease' }}
             />
-
-            {/* Render the error bubble if there is an error */}
             {error && (
               <div className="cloud-bubble">
                 <p className="cloud-text">{error}</p>
@@ -310,14 +304,6 @@ const FirstGrid = () => {
           />
         </div>
       </div>
-
-      {/* Display the fetched movie data if available */}
-      {/* {movieData && (
-        <div className="movie-data p-4 bg-[var(--dark-blue)] text-white">
-          <h3>Movie Data:</h3>
-          <pre>{JSON.stringify(movieData, null, 2)}</pre>
-        </div>
-      )} */}
     </div>
   );
 };

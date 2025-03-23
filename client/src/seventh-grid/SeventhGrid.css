@@ -8,7 +8,9 @@
   
   .genre-display {
     display: flex;
+    min-width: 160px;
     align-items: center;
+    justify-content: center;
     gap: 10px; /* Space between icon and text */
     padding: 10px 20px;
     background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */

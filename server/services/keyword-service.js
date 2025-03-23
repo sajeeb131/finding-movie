@@ -1,4 +1,7 @@
+// services/keyword-service.js - Updated version with tag detection
+
 const { GENRES } = require('../utils/constants');
+const { TAG_KEYWORD_MAP } = require('../utils/movie-tags');  // Import our new tag mapping
 const nlp = require('compromise');
 const Fuse = require('fuse.js');
 const Cast = require('../models/cast');
@@ -35,7 +38,6 @@ const detectCast = async (text) => {
 };
 
 // Detect genre from the text
-// Detect genre from the text (exact match only)
 const detectGenre = (text) => {
     const normalizedText = text.toLowerCase();
     const words = normalizedText.split(/\s+/); // Split by whitespace
@@ -48,6 +50,52 @@ const detectGenre = (text) => {
     console.log('Detected genres:', detectedGenres);
 
     return [...new Set(detectedGenres)]; // Remove duplicates
+};
+
+// NEW FUNCTION: Detect tags from the text
+const detectTags = (text) => {
+    const normalizedText = text.toLowerCase();
+    const detectedTags = new Set();
+    
+    // Try to match phrases first (for multi-word tags)
+    for (const [keyword, tag] of TAG_KEYWORD_MAP.entries()) {
+        if (keyword.includes(' ') && normalizedText.includes(keyword)) {
+            detectedTags.add(tag);
+        }
+    }
+    
+    // Then check individual words for single-word matches
+    const words = normalizedText.split(/\s+/);
+    for (const word of words) {
+        if (TAG_KEYWORD_MAP.has(word)) {
+            detectedTags.add(TAG_KEYWORD_MAP.get(word));
+        }
+    }
+    
+    // Special case handling for common phrases in user queries
+    const phraseMatches = {
+        'about aliens': 'aliens',
+        'with aliens': 'aliens',
+        'about zombies': 'zombies',
+        'with zombies': 'zombies',
+        'about magic': 'magic',
+        'about time travel': 'time travel',
+        'with superheroes': 'superheroes',
+        'about dragons': 'dragons',
+        'about vampires': 'vampires',
+        'about pirates': 'pirates',
+        'about detectives': 'detectives',
+        'about spies': 'spies'
+    };
+    
+    for (const [phrase, tag] of Object.entries(phraseMatches)) {
+        if (normalizedText.includes(phrase)) {
+            detectedTags.add(tag);
+        }
+    }
+    
+    console.log('Detected tags:', [...detectedTags]);
+    return [...detectedTags];
 };
 
 // Detect logical operator (and/or) in the prompt
@@ -65,6 +113,7 @@ const extractKeywords = async (prompt) => {
         directorNames: [],
         releaseYear: null,
         genre: [],
+        tags: [],  // New field for tags
         operator: null 
     };
 
@@ -75,9 +124,10 @@ const extractKeywords = async (prompt) => {
         keywords.releaseYear = yearMatch[0];
     }
     keywords.genre = detectGenre(prompt);
+    keywords.tags = detectTags(prompt);  // Add tag detection
     keywords.operator = detectLogicalOperator(prompt);
+    
     console.log('Extracted keywords:', keywords);
-
     return keywords;
 };
 

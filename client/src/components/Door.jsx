@@ -1,22 +1,25 @@
-import { useState } from "react"
-import "./Door.css"
-import { CiLock } from "react-icons/ci"
-import { CiUnlock } from "react-icons/ci"
+import { useState } from "react";
+import "./Door.css";
+import { CiLock, CiUnlock } from "react-icons/ci";
+import { useMovieContext } from "../context/MovieContext";
 
 const Door = () => {
-  const [locked, setLocked] = useState(true)
-  const [isOpen, setIsOpen] = useState(false)
+  const [locked, setLocked] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const { gameStarted } = useMovieContext(); // Get global gameStarted state
 
   const handleUnlock = () => {
+    // Only allow unlocking if the game has started
+    if (!gameStarted) return;
+
     // Play unlock sound
     const unlockSound = new Audio("/audio/door.mp3.wav");
-    
     setLocked(false);
     setTimeout(() => {
       setIsOpen(true);
       unlockSound.play();
-    }); // Slight delay before opening the door
-  }
+    }, 200); // slight delay before opening the door (adjust if needed)
+  };
 
   const handleLock = () => {
     // Play lock sound
@@ -25,13 +28,17 @@ const Door = () => {
 
     setLocked(true);
     setIsOpen(false);
-  }
+  };
 
   return (
     <div
       className={`w-full door-container ${isOpen ? "door-open" : ""}`}
-      onMouseEnter={() => setLocked(false)}
-      onMouseLeave={() => !isOpen && setLocked(true)}
+      onMouseEnter={() => {
+        if (gameStarted) setLocked(false);
+      }}
+      onMouseLeave={() => {
+        if (gameStarted && !isOpen) setLocked(true);
+      }}
     >
       <div className={`w-full border-r-[1px] door-part ${isOpen ? "left-door" : ""}`}>
         <div className="door-design">{/* empty */}</div>
@@ -40,7 +47,7 @@ const Door = () => {
         <div className="door-design">{/* empty */}</div>
       </div>
 
-      {/* door lock  */}
+      {/* Render door lock only if door is closed */}
       {!isOpen && (
         <div
           className="flex flex-row items-center justify-center lock-circle"
@@ -54,7 +61,7 @@ const Door = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Door
+export default Door;

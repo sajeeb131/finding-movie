@@ -5,7 +5,8 @@ const {
     fetchMoviesForEachActorSeparately, 
     fetchMovieTrailer, 
     searchByGenre,
-    GENRE_IDS // Import GENRE_IDS directly
+    searchByTags,
+    GENRE_IDS
 } = require('../services/tmdb-service');
 const { extractKeywords } = require('../services/keyword-service');
 
@@ -33,37 +34,34 @@ const processPrompt = async (req, res) => {
                 movies = [...new Map([...moviesSeparately].map(m => [m.id, m])).values()];
             }
 
-            // Step 4: Fetch movies based on genres if no movie name or actors
+            // Step 4: Fetch movies based on tags (New Step!)
+            if (movies.length === 0 && keywords.tags && keywords.tags.length > 0) {
+                console.log('Searching for movies with tags:', keywords.tags);
+                const tagMovies = await searchByTags(keywords.tags);
+                movies = [...new Map([...tagMovies.slice(0, 5)].map(m => [m.id, m])).values()];
+            }
+
+            // Step 5: Fetch movies based on genres if no movie name, actors, or tags found
             if (movies.length === 0 && keywords.genre && keywords.genre.length > 0) {
                 const genreMovies = await searchByGenre(keywords.genre);
                 movies = [...new Map([...genreMovies.slice(0, 5)].map(m => [m.id, m])).values()];
             }
 
-            // Step 5: Add other filters if available
+            // Step 6: Add other filters if available
             if (keywords.releaseYear) queries.primary_release_year = keywords.releaseYear;
-            // if (keywords.genre && keywords.genre.length > 0) {
-            //     queries.with_genres = keywords.genre
-            //         .map(genre => {
-            //             const genreId = GENRE_IDS[genre.toLowerCase()];
-            //             if (!genreId) console.warn(`Genre '${genre}' not found in GENRE_IDS`);
-            //             return genreId;
-            //         })
-            //         .filter(id => id !== undefined)
-            //         .join(',');
-            // }
         }
 
-        // Step 6: Fetch movies based on other filters
+        // Step 7: Fetch movies based on other filters
         if (Object.keys(queries).length > 0) {
             const filteredMovies = await searchMovies(queries);
             movies = [...new Map([...movies, ...filteredMovies.slice(0, 5)].map(m => [m.id, m])).values()];
         }
 
-        // Step 7: Fetch trailers and genres for each movie
+        // Step 8: Fetch trailers, genres, and actors for each movie
         for (let i = 0; i < movies.length; i++) {
             const movie = movies[i];
-            const { trailerUrl, genres } = await fetchMovieTrailer(movie.id);
-            movies[i] = { ...movie, trailerUrl, genres };
+            const { trailerUrl, genres, actors } = await fetchMovieTrailer(movie.id);
+            movies[i] = { ...movie, trailerUrl, genres, actors };
         }
 
         console.log('Final movies:', movies);

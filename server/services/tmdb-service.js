@@ -126,28 +126,80 @@ const searchByGenre = async (genreNames) => {
     }
 };
 
-// Function to fetch movie trailers and genres
+// Function to search movies by keywords (tags)
+const searchByTags = async (tags) => {
+    if (!tags || tags.length === 0) return [];
+    
+    try {
+        // Use TMDB's keyword search functionality
+        // First get keyword IDs from the tags
+        const tagResults = [];
+        
+        for (const tag of tags) {
+            // Search for keyword ID
+            const keywordResponse = await withRetry(() =>
+                apiClient.get('/search/keyword', { params: { query: tag } })
+            );
+            
+            if (keywordResponse.data.results && keywordResponse.data.results.length > 0) {
+                const keywordId = keywordResponse.data.results[0].id;
+                
+                // Search for movies with this keyword
+                const moviesResponse = await withRetry(() =>
+                    apiClient.get('/discover/movie', { params: { with_keywords: keywordId } })
+                );
+                
+                if (moviesResponse.data.results && moviesResponse.data.results.length > 0) {
+                    tagResults.push(...moviesResponse.data.results);
+                }
+            }
+        }
+        
+        // Remove duplicates
+        return [...new Map(tagResults.map(movie => [movie.id, movie])).values()];
+        
+    } catch (error) {
+        console.error('Error in searchByTags:', error.message);
+        return [];
+    }
+};
+
+// Function to fetch movie trailers, genres, and actors (credits)
+// Uses append_to_response to get both videos and credits in one call
 const fetchMovieTrailer = async (movieId) => {
     try {
         const response = await withRetry(() =>
-            apiClient.get(`/movie/${movieId}`, { params: { append_to_response: 'videos' } })
+            apiClient.get(`/movie/${movieId}`, { params: { append_to_response: 'videos,credits' } })
         );
         const movieData = response.data;
         const genres = movieData.genres ? movieData.genres.map(genre => genre.name.toLowerCase()) : [];
         const trailers = movieData.videos.results.filter(video => video.type === 'Trailer' && video.site === 'YouTube');
         const trailerUrl = trailers.length > 0 ? `https://www.youtube.com/watch?v=${trailers[0].key}` : null;
-        return { trailerUrl, genres };
+        
+        // Fetch up to 8 actors from credits
+        const actors = movieData.credits && movieData.credits.cast
+          ? movieData.credits.cast.slice(0, 12).map(actor => ({
+                id: actor.id,
+                name: actor.name,
+                profile_path: actor.profile_path,
+            }))
+          : [];
+          
+        return { trailerUrl, genres, actors };
     } catch (error) {
         console.error(`Error fetching details for movie ID ${movieId}:`, error.message);
-        return { trailerUrl: null, genres: [] };
+        return { trailerUrl: null, genres: [], actors: [] };
     }
 };
 
+// Export the new function along with existing ones
 module.exports = { 
     searchMovies, 
     searchPerson, 
     fetchMoviesForAllActorsTogether, 
     fetchMoviesForEachActorSeparately, 
     searchByGenre, 
-    fetchMovieTrailer 
+    fetchMovieTrailer,
+    searchByTags,
+    GENRE_IDS // Make sure to export GENRE_IDS if needed elsewhere
 };
