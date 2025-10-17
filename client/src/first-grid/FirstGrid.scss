@@ -36,9 +36,7 @@
 }
 
 .avatar-image {
-  width: min(380px, 85%);
-  height: auto;
-  max-height: 85%;
+
   object-fit: contain;
 }
 
@@ -81,11 +79,13 @@
     color: var(--dark-green);
     cursor: grab;
     left: 0;
+    top: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: left 0.3s ease-out; /* Smooth transition for position */
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    z-index: 10;
 }
 
 .btn-main:focus {
@@ -378,12 +378,21 @@
   }
   
   .btn-main {
-    margin: 8px 0;
+    position: absolute;
     height: 44px;
     min-height: 44px; /* Touch-friendly size */
     font-size: 1.1rem;
     width: 100px;
     min-width: 100px; /* Touch-friendly width */
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
+  
+  .button-slider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
   }
   
   .reset-button {
@@ -446,12 +455,15 @@
   }
   
   .btn-main {
-    margin: 6px 0;
+    position: absolute;
     height: 40px;
     min-height: 40px;
     font-size: 1rem;
     width: 90px;
     min-width: 90px;
+    top: 0;
+    left: 0;
+    z-index: 10;
   }
   
   .reset-button {
@@ -504,9 +516,13 @@
   }
   
   .btn-main {
+    position: absolute;
     height: 48px;
     font-size: 1.2rem;
     width: 110px;
+    top: 0;
+    left: 0;
+    z-index: 10;
   }
   
   .reset-button {
@@ -522,6 +538,38 @@
       min-height: 120px;
       font-size: 1rem;
     }
+  }
+}
+
+/* Medium desktop styles (including 1280px width) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .btn-main {
+    position: absolute;
+    width: 25%; /* Reduced from 30% to prevent overflow */
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    font-size: 1.2rem;
+  }
+  .header-text{
+    font-size: 0.8rem;
+  }
+  .dot-image{
+    width: 30%;
+  }
+}
+
+/* Large desktop styles */
+@media (min-width: 1441px) {
+  .btn-main {
+    position: absolute;
+    width: 30%; /* Original width for large screens */
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    font-size: 1.4rem;
   }
 }
 

@@ -232,6 +232,7 @@ const FirstGrid = () => {
         <img 
           src="https://cdn.prod.website-files.com/61ba0d8d68d959d09b491aa4/632c8d7e710706a7d835765a_device-dots.png" 
           alt="" 
+          className='dot-image'
           width={100} 
           height={25}
         />
