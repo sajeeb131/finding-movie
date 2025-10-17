@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { TMDB_API_URL } = require('../utils/constants');
 const { TMDB_API_KEY } = process.env;
+const cacheService = require('./cache-service');
 
 // TMDb Genre ID mapping
 const GENRE_IDS = {
@@ -53,10 +54,49 @@ const withRetry = async (fn, retries = MAX_RETRIES) => {
 // Function to search movies with given query parameters
 const searchMovies = async (queryParams) => {
     try {
+        // Create cache key
+        const cacheKey = cacheService.createKey('searchMovies', queryParams);
+        
+        // Check cache first
+        const cached = cacheService.get(cacheKey);
+        if (cached) {
+            console.log('Cache hit for searchMovies:', queryParams);
+            return cached;
+        }
+        
+        let endpoint, params;
+        
+        // Use /search/movie for query-based searches
+        if (queryParams.query) {
+            endpoint = '/search/movie';
+            params = queryParams;
+        } else {
+            // Use /discover/movie for filter-based searches
+            endpoint = '/discover/movie';
+            params = queryParams;
+        }
+        
+        console.log(`TMDB API Call: ${endpoint} with params:`, params);
+        
         const response = await withRetry(() =>
-            apiClient.get('/discover/movie', { params: queryParams })
+            apiClient.get(endpoint, { params })
         );
-        return response.data.results || [];
+        
+        const results = response.data.results || [];
+        console.log(`TMDB returned ${results.length} results`);
+        
+        // Log the first few results for debugging
+        if (results.length > 0) {
+            console.log('Top 3 results:');
+            results.slice(0, 3).forEach((movie, index) => {
+                console.log(`${index + 1}. ${movie.title} (${movie.release_date}) - Popularity: ${movie.popularity}`);
+            });
+        }
+        
+        // Cache results for 30 minutes
+        cacheService.set(cacheKey, results, 1800000);
+        
+        return results;
     } catch (error) {
         console.error('Error in searchMovies:', error.message);
         return [];
@@ -67,15 +107,31 @@ const searchMovies = async (queryParams) => {
 const searchPerson = async (name) => {
     if (!name) return null;
     try {
+        // Create cache key
+        const cacheKey = cacheService.createKey('searchPerson', name);
+        
+        // Check cache first
+        const cached = cacheService.get(cacheKey);
+        if (cached) {
+            console.log('Cache hit for searchPerson:', name);
+            return cached;
+        }
+        
         const encodedName = encodeURIComponent(name);
         const response = await withRetry(() =>
             apiClient.get('/search/person', { params: { query: encodedName } })
         );
         if (!response.data?.results?.length) {
             console.log(`No results found for person: ${name}`);
+            cacheService.set(cacheKey, null, 300000); // Cache null result for 5 minutes
             return null;
         }
-        return response.data.results[0];
+        
+        const result = response.data.results[0];
+        // Cache person results for 24 hours
+        cacheService.set(cacheKey, result, 86400000);
+        
+        return result;
     } catch (error) {
         console.error(`Error searching for person (${name}):`, error.message);
         return null;
@@ -131,6 +187,16 @@ const searchByTags = async (tags) => {
     if (!tags || tags.length === 0) return [];
     
     try {
+        // Create cache key
+        const cacheKey = cacheService.createKey('searchByTags', tags);
+        
+        // Check cache first
+        const cached = cacheService.get(cacheKey);
+        if (cached) {
+            console.log('Cache hit for searchByTags:', tags);
+            return cached;
+        }
+        
         // Use TMDB's keyword search functionality
         // First get keyword IDs from the tags
         const tagResults = [];
@@ -156,7 +222,12 @@ const searchByTags = async (tags) => {
         }
         
         // Remove duplicates
-        return [...new Map(tagResults.map(movie => [movie.id, movie])).values()];
+        const results = [...new Map(tagResults.map(movie => [movie.id, movie])).values()];
+        
+        // Cache tag results for 1 hour
+        cacheService.set(cacheKey, results, 3600000);
+        
+        return results;
         
     } catch (error) {
         console.error('Error in searchByTags:', error.message);

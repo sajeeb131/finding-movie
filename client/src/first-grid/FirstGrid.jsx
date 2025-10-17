@@ -90,7 +90,8 @@ const FirstGrid = () => {
   // Fetch movie data from the backend
   const fetchMovieData = async () => {
     try {
-      const response = await fetch(`${API_URI}/api/search`, {
+      // Use the new AI-powered endpoint
+      const response = await fetch(`${API_URI}/api/ai/search`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: text }),
@@ -101,10 +102,23 @@ const FirstGrid = () => {
       }
 
       const data = await response.json();
+      console.log('Frontend received movies:', data.movies);
+      console.log('First movie details:', data.movies?.[0]);
       setMovies(data.movies);
+      
       // Extract video id safely (assumes trailerUrl exists and has "v=")
-      const videoId = data.movies[0]?.trailerUrl.split("v=")[1];
-      setYoutube(videoId);
+      if (data.movies && data.movies.length > 0) {
+        const firstMovie = data.movies[0];
+        console.log('First movie title:', firstMovie.title);
+        console.log('First movie release date:', firstMovie.release_date);
+        console.log('First movie ID:', firstMovie.id);
+        
+        const videoId = firstMovie?.trailerUrl?.split("v=")[1];
+        setYoutube(videoId);
+        console.log('Set YouTube video ID:', videoId);
+      } else {
+        console.log('No movies received from backend');
+      }
     } catch (error) {
       console.error("Error fetching movie data:", error);
     }
