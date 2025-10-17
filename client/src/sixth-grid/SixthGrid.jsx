@@ -30,17 +30,17 @@ const SixthGrid = () => {
           {actors.slice(0, 12).map((actor, index) => (
             <div
               key={actor.id || index}
-              className="flex flex-col items-center max-w-[80px] cursor-pointer"
+              className="flex flex-col items-center max-w-[80px] sm:max-w-[70px] md:max-w-[75px] lg:max-w-[80px] xl:max-w-[85px] cursor-pointer"
               onClick={() => handleActorClick(actor)}
             >
               <img
                 src={
-                  actor.profile_path 
+                  actor.profile_path
                     ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
                     : actorAvatar
                 }
                 alt={actor.name}
-                className="w-20 h-20 rounded-full object-cover border-2 border-gray-500 actor-avatar"
+                className="w-16 h-16 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 xl:w-20 xl:h-20 rounded-full object-cover border-2 border-gray-500 actor-avatar"
               />
             </div>
           ))}

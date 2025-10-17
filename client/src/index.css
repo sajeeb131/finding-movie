@@ -94,3 +94,63 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Global responsive styles */
+html {
+  font-size: 16px;
+}
+
+/* Mobile-first responsive typography */
+@media (max-width: 440px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 769px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+/* Ensure touch targets are at least 44x44px */
+@media (pointer: coarse) {
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .lock-circle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Improve scrolling on iOS */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent horizontal scroll on mobile */
+body {
+  overflow-x: hidden;
+}
+
+/* Ensure images are responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Focus styles for accessibility */
+button:focus,
+a:focus,
+input:focus,
+textarea:focus {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}

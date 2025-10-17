@@ -56,3 +56,55 @@
     50% { opacity: 1; }
     100% { opacity: 0; }
   }
+
+/* Mobile responsive styles for SeventhGrid */
+@media (max-width: 640px) {
+  .genre-display {
+    min-width: 120px;
+    padding: 8px 16px;
+    gap: 8px;
+  }
+  
+  .genre-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .genre-text {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 440px) {
+  .genre-display {
+    min-width: 100px;
+    padding: 6px 12px;
+    gap: 6px;
+  }
+  
+  .genre-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .genre-text {
+    font-size: 1rem;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 641px) and (max-width: 768px) {
+  .genre-display {
+    min-width: 140px;
+    padding: 12px 24px;
+  }
+  
+  .genre-icon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .genre-text {
+    font-size: 1.3rem;
+  }
+}

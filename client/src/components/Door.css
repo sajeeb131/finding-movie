@@ -123,4 +123,56 @@ pointer-events: none;}
       transform: translateX(100%); /* Fast final movement */
     }
   }
+
+/* Mobile responsive styles for Door component */
+@media (max-width: 640px) {
+  .door-container {
+    border-radius: 8px;
+  }
   
+  .door-part {
+    padding: 4px;
+  }
+  
+  .lock-circle {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+  
+  .lock-circle svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 440px) {
+  .door-part {
+    padding: 2px;
+  }
+  
+  .lock-circle {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+  
+  .lock-circle svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Touch-friendly adjustments */
+@media (pointer: coarse) {
+  .lock-circle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .lock-circle:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}

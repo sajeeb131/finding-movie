@@ -39,3 +39,86 @@ border-radius: 10px;
     border-radius: 10px;
     
 }
+
+/* Mobile-first responsive breakpoints */
+@media (max-width: 640px) {
+    .grid-main {
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: auto;
+        gap: 0.5rem;
+        padding: 0.5rem;
+    }
+    
+    .box {
+        border-radius: 8px;
+    }
+    
+    /* Ensure ThirdGrid has appropriate height on larger mobile devices */
+    .box:nth-child(3) {
+        min-height: 200px;
+    }
+    
+    /* Ensure FifthGrid has appropriate height on larger mobile devices */
+    .box:nth-child(5) {
+        min-height: 200px;
+    }
+}
+
+@media (max-width: 440px) {
+    .grid-main {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        min-height: 100vh;
+    }
+    
+    .box {
+        min-height: 120px;
+        width: 100%;
+    }
+    
+    /* Ensure FirstGrid has enough height to show the prompt area */
+    .box:nth-child(1) {
+        min-height: 40vh;
+        flex: 0 0 auto;
+    }
+    /* Ensure ThirdGrid has more height on mobile */
+    .box:nth-child(3) {
+        min-height: 250px;
+    }
+    
+    /* Ensure FifthGrid has more height on mobile */
+    .box:nth-child(5) {
+        min-height: 250px;
+    }
+    
+
+
+}
+
+/* Tablet breakpoint */
+@media (min-width: 641px) and (max-width: 768px) {
+    .grid-main {
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(10, minmax(0, 1fr));
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+}
+
+/* Small desktop breakpoint */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .grid-main {
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+}
+
+/* Large desktop breakpoint */
+@media (min-width: 1025px) {
+    .grid-main {
+        gap: 1.5rem;
+        padding: 2rem;
+    }
+}

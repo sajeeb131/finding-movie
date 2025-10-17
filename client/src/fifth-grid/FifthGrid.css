@@ -21,3 +21,47 @@
 }
 .g5-main{
 }
+.trailer-iframe{
+  width: 100%;
+  height: 100%;
+}
+/* Mobile responsive styles for FifthGrid */
+@media (max-width: 640px) {
+  .g5-upper-left {
+    padding: 1rem;
+    width: 100%;
+  }
+  
+  .g3-upper-left-text {
+    font-size: 0.9rem;
+  }
+  
+  .trailer-iframe {
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 440px) {
+  .g5-upper-left {
+    padding: 0.75rem;
+  }
+  
+  .g3-upper-left-text {
+    font-size: 0.8rem;
+  }
+  
+  .trailer-iframe {
+    border-radius: 4px;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 641px) and (max-width: 768px) {
+  .g5-upper-left {
+    padding: 1.5rem;
+  }
+  
+  .g3-upper-left-text {
+    font-size: 1.1rem;
+  }
+}

@@ -25,18 +25,21 @@ const FifthGrid = () => {
               <section className='h-full g3-tv'>
                 <div className='h-full g3-tv-display'>
                   {/* movie here */}
-                  {
-                    Map.movies
-                  }
-                  <iframe 
-                    width="100%" 
-                    height="100%" 
-                    src={`https://www.youtube.com/embed/${yt}`}
-                    title="YouTube video player" 
-                    frameBorder="0" 
-                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowFullScreen>
-                  </iframe>
+                  {yt && (
+                    <iframe
+                      className="trailer-iframe"
+                      src={`https://www.youtube.com/embed/${yt}`}
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen>
+                    </iframe>
+                  )}
+                  {!yt && (
+                    <div className="flex items-center justify-center h-full text-white">
+                      <p>No trailer available</p>
+                    </div>
+                  )}
                 </div>
               </section>
             </div>

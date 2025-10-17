@@ -44,7 +44,7 @@ const ThirdGrid = () => {
       <div className='w-full h-full flex flex-col gap-4 g3-main'>
         <div className='flex flex-row items-center justify-between gap-4 g3-upper'>
           <div className='flex flex-row items-center justify-between g3-upper-left'>
-            <div className='flex flex-row gap-4 items-start'>               
+            <div className='flex flex-row gap-4 items-center'>               
               <MdOutlineMovieFilter size={25} />
               <span className='font-extra-small g3-upper-left-text'>
                 {currentMovie.title}

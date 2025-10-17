@@ -80,7 +80,10 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 12px;
-  }
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
   
   /* Avatar appearance animation */
   .actor-avatar {
@@ -115,3 +118,137 @@
     }
   }
   
+
+/* Mobile responsive styles for SixthGrid */
+@media (max-width: 640px) {
+  .g6-main {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .actor-container {
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .actor-avatar {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .modal-image {
+    max-width: 85vw;
+    max-height: 85vh;
+  }
+  
+  .modal-close-button {
+    font-size: 1.5rem;
+    top: 5px;
+    right: 5px;
+  }
+}
+
+@media (max-width: 440px) {
+  .actor-container {
+    gap: 6px;
+  }
+  
+  .actor-avatar {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .modal-image {
+    max-width: 80vw;
+    max-height: 80vh;
+  }
+  
+  .modal-close-button {
+    font-size: 1.25rem;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 641px) and (max-width: 768px) {
+  .actor-container {
+    gap: 10px;
+  }
+  
+  .actor-avatar {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+/* Small desktop styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .actor-container {
+    gap: 11px;
+  }
+  
+  /* Base styles for g6-main container */
+  .g6-main {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .actor-avatar {
+    width: 75px;
+    height: 75px;
+  }
+}
+
+/* Medium desktop styles (including 1280px) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .actor-container {
+    gap: 12px;
+    max-width: 100%;
+    justify-content: center;
+  }
+  
+  .actor-avatar {
+    width: 80px;
+    height: 80px;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Large desktop styles */
+@media (min-width: 1441px) {
+  .actor-container {
+    gap: 14px;
+  }
+  
+  .actor-avatar {
+    width: 85px;
+    height: 85px;
+  }
+}
+
+/* Touch-friendly adjustments */
+@media (pointer: coarse) {
+  .actor-avatar {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .actor-avatar:hover {
+    transform: scale(1.15);
+  }
+  
+  .modal-close-button {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

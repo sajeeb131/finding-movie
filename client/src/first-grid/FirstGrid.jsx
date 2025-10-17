@@ -126,6 +126,7 @@ const FirstGrid = () => {
     setGameStarted(false);
   };
 
+
   // Slider event handlers
   const handleMouseDown = async (e) => {
     if (buttonText === "RESET") {
@@ -137,19 +138,19 @@ const FirstGrid = () => {
       if ("speechSynthesis" in window) {
         window.speechSynthesis.cancel(); // Stop any ongoing speech
         const speakText = () => {
-          const utterance = new SpeechSynthesisUtterance("teri ma ki chut");
-          utterance.pitch = 1.3; 
-          utterance.rate = 1.05; 
+          const utterance = new SpeechSynthesisUtterance("Please, type what you want to find.");
+          utterance.pitch = 1.3;
+          utterance.rate = 1.05;
           const voices = window.speechSynthesis.getVoices();
           utterance.voice = voices.find(voice => voice.name.includes("Google UK English Female")) || voices[0];
           window.speechSynthesis.speak(utterance);
         };
         if (window.speechSynthesis.getVoices().length === 0) {
           window.speechSynthesis.onvoiceschanged = () => {
-            speakText(); 
+            speakText();
           };
         } else {
-          speakText(); 
+          speakText();
         }
       } else {
         console.log("Sorry, your browser does not support text to speech!");
@@ -215,9 +216,9 @@ const FirstGrid = () => {
   };
 
   return (
-    <div className='flex flex-col justifiy-center bg-[var(--blue)] grid-child'>
+    <div className='flex flex-col justifiy-center bg-[var(--blue)] grid-child gc-1'>
       <header className='flex flex-row items-center justify-between p-10 g1-header'>
-        <div className='flex flex-row items-center gap-4'>
+        <div className='flex flex-row items-center gap-2 lg:gap-4'>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" height="1.55em" viewBox="0 0 35 24" width="2.39em">
             <g fill="CurrentColor">
               <rect height="6.67978" rx="3.33989" transform="matrix(0 1 -1 0 7.546878 -5.812502)" width="22.2659" x="6.67969" y=".867188"></rect>
@@ -226,7 +227,7 @@ const FirstGrid = () => {
               <rect height="6.67978" rx="3.33989" transform="matrix(0 1 -1 0 44.47269 -24.48051)" width="13.1369" x="34.4766" y="9.99609"></rect>
             </g>
           </svg>
-          <h5 className='font-medium'>fINDING-MOVIE</h5>
+          <h5 className='font-medium header-text'>fINDING-MOVIE</h5>
         </div>
         <img 
           src="https://cdn.prod.website-files.com/61ba0d8d68d959d09b491aa4/632c8d7e710706a7d835765a_device-dots.png" 
@@ -239,12 +240,12 @@ const FirstGrid = () => {
       <section className='flex flex-col items-center gap-6 p-10 g1-mid'>
         <div className='h-[40vh] bg-[var(--black)] g1-mid-tv'>
           <div className='flex items-center justify-center g1-mid-tv-display' style={{ position: 'relative' }}>
-            <img 
-              src={avatarImage} 
-              alt="Avatar" 
-              width={380} 
+            <img
+              src={avatarImage}
+              alt="Avatar"
+              width={380}
               height={380}
-              className='absolute z-10'
+              className='absolute z-10 avatar-image'
               style={{ transition: 'all 0.3s ease' }}
             />
             {error && (
@@ -258,19 +259,19 @@ const FirstGrid = () => {
         <div className='flex justify-center items-center h-[15vh] bg-[var(--dark-blue)] g1-mid-button'>
           <div className='flex flex-row button-slider' ref={sliderRef}>
             <div className='flex flex-row slider-images'>
-              <img 
-                src="https://cdn.prod.website-files.com/61ba0d8d68d959d09b491aa4/632d71d15867f648fad21525_bg-slider.png" 
-                height={20} 
+              <img
+                src="https://cdn.prod.website-files.com/61ba0d8d68d959d09b491aa4/632d71d15867f648fad21525_bg-slider.png"
+                height={20}
                 className='btn-slider-img'
               />
-              <img 
-                src="https://cdn.prod.website-files.com/61ba0d8d68d959d09b491aa4/632d71d15867f648fad21525_bg-slider.png" 
-                height={20} 
+              <img
+                src="https://cdn.prod.website-files.com/61ba0d8d68d959d09b491aa4/632d71d15867f648fad21525_bg-slider.png"
+                height={20}
                 className='btn-slider-img'
               />
-              <img 
-                src="https://cdn.prod.website-files.com/61ba0d8d68d959d09b491aa4/632d71d15867f648fad21525_bg-slider.png" 
-                height={20} 
+              <img
+                src="https://cdn.prod.website-files.com/61ba0d8d68d959d09b491aa4/632d71d15867f648fad21525_bg-slider.png"
+                height={20}
                 className='btn-slider-img'
               />
             </div>
