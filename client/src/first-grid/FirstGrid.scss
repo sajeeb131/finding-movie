@@ -72,11 +72,12 @@
 
 .btn-main {
     position: absolute;
-    width: 40%;
+    width: 30%;
+    height: 100%;
     border-radius: 5px;
     background-color: var(--green);
     text-align: center;
-    font-size: 2em;
+    font-size: 1.4em;
     color: var(--dark-green);
     cursor: grab;
     left: 0;
@@ -473,6 +474,9 @@
         font-size: 0.85rem;
       }
     }
+  }
+  .g1-btm{
+    width: 100%;
   }
 }
 
