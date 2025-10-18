@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { MdOutlineMovieFilter } from "react-icons/md";
 import Door from '../components/Door';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
@@ -7,7 +7,13 @@ import './FifthGrid.css'
 import { useMovieContext } from '../context/MovieContext';
 
 const FifthGrid = () => {
-  const {movies, yt} = useMovieContext()
+  const {movies, yt, registerDoorRef} = useMovieContext()
+  const doorRef = useRef(null);
+  
+  // Register door ref with context
+  React.useEffect(() => {
+    registerDoorRef('fifthGrid', doorRef);
+  }, [registerDoorRef]);
   return (
     <div className='w-full h-full g3-c'>
         <div className='w-full h-full flex flex-col gap-4 g3-main g5-main'>
@@ -44,7 +50,7 @@ const FifthGrid = () => {
               </section>
             </div>
         </div>
-        <Door/>
+        <Door ref={doorRef}/>
 
     </div>
   )

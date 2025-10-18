@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Door from '../components/Door';
 import { FaStar } from "react-icons/fa";
 import { useMovieContext } from '../context/MovieContext';
 import './SecondGrid.css'
 const SecondGrid = () => {
-  const { movies, currentIndex } = useMovieContext();
+  const { movies, currentIndex, registerDoorRef } = useMovieContext();
+  const doorRef = useRef(null);
+  
+  // Register door ref with context
+  React.useEffect(() => {
+    registerDoorRef('secondGrid', doorRef);
+  }, [registerDoorRef]);
   
   // Ensure movies exists and has elements before calculating
-  const calculatedRating = movies && movies.length > 0 
-    ? Math.round(movies[currentIndex].vote_average / 2) 
+  const calculatedRating = movies && movies.length > 0
+    ? Math.round(movies[currentIndex].vote_average / 2)
     : 0;
   const [rating, setRating] = useState(calculatedRating);
 
@@ -45,7 +51,7 @@ const SecondGrid = () => {
           </div>
         )}
       </div>
-      <Door />
+      <Door ref={doorRef} />
     </div>
   );
 };

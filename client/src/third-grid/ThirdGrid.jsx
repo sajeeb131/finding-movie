@@ -5,6 +5,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { MdOutlineMovieFilter } from "react-icons/md";
 import { useMovieContext } from '../context/MovieContext';
 import notFound from '../assets/not-found.jpg';
+import buttonSound from '/audio/button.mp3';
 
 const ThirdGrid = () => {
   const { movies, setYoutube, currentIndex, setCurrentIndex } = useMovieContext();
@@ -24,8 +25,16 @@ const ThirdGrid = () => {
     return null;
   };
 
+  // Play button sound
+  const playButtonSound = () => {
+    const audio = new Audio(buttonSound);
+    audio.volume = 0.5;
+    audio.play();
+  };
+
   // Helper to update movie index and set YouTube video
   const updateMovieIndex = (direction) => {
+    playButtonSound(); // Play sound when arrow is clicked
     setCurrentIndex((prevIndex) => {
       const total = movies.length;
       const newIndex =

@@ -207,3 +207,78 @@
     transform: scale(0.95);
   }
 }
+
+/* High zoom level adjustments for 150x zoom on 1920p screens */
+@media (min-resolution: 1.5dppx) {
+  .g3-main {
+    padding: 12px;
+  }
+  
+  .g3-upper-left {
+    padding: 12px;
+  }
+  
+  .g3-upper-left-text {
+    font-size: 14px;
+    max-width: 30ch;
+  }
+  
+  .g3-arrow {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .g3-arrow svg {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .g3-tv {
+    padding: 8px;
+  }
+  
+  .poster {
+    border-width: 8px;
+    border-top: 0;
+    border-bottom: 0;
+  }
+  .g3-lower{
+    height: 75%;
+  }
+}
+
+/* Extra high zoom level adjustments */
+@media (min-resolution: 2dppx) {
+  .g3-main {
+    padding: 8px;
+  }
+  
+  .g3-upper-left {
+    padding: 8px;
+  }
+  
+  .g3-upper-left-text {
+    font-size: 12px;
+    max-width: 25ch;
+  }
+  
+  .g3-arrow {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .g3-arrow svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .g3-tv {
+    padding: 6px;
+  }
+  
+  .poster {
+    border-width: 6px;
+    border-top: 0;
+    border-bottom: 0;
+  }
+}

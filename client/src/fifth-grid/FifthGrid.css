@@ -65,3 +65,15 @@
     font-size: 1.1rem;
   }
 }
+
+@media (min-resolution: 1.5dppx) {
+  .g5-upper-left{
+    padding: 12px;
+  }
+}
+
+@media (min-resolution: 1.5dppx) { 
+  .g5-main{
+    padding: 12px;
+  }
+}

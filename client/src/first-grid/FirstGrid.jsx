@@ -5,12 +5,13 @@ import avatarLookingDown from '../assets/looking-down.png';
 import avatarLookingRight from '../assets/looking-right.png';
 import typingSound from '/audio/type.wav';
 import buttonSound from '/audio/button.mp3';
+import readySound from '/audio/door.mp3.wav';
 import { API_URI } from '../utils/api';
 import { useMovieContext } from '../context/MovieContext';
 
 const FirstGrid = () => {
   // Access context including the new gameStarted state setter
-  const { setMovies, setYoutube, setGameStarted } = useMovieContext();
+  const { setMovies, setYoutube, setGameStarted, resetAllDoors } = useMovieContext();
 
   // Slider and backend states
   const [position, setPosition] = useState(0);
@@ -18,6 +19,7 @@ const FirstGrid = () => {
   const [buttonText, setButtonText] = useState("START");
   const [movieData, setMovieData] = useState(null);
   const [error, setError] = useState("");
+  const [readyMessage, setReadyMessage] = useState("");
 
   const sliderRef = useRef(null);
   const buttonRef = useRef(null);
@@ -54,6 +56,12 @@ const FirstGrid = () => {
   const playButtonSound = () => {
     const audio = new Audio(buttonSound);
     audio.volume = 0.5;
+    audio.play();
+  };
+
+  const playReadySound = () => {
+    const audio = new Audio(readySound);
+    audio.volume = 0.7;
     audio.play();
   };
 
@@ -116,6 +124,11 @@ const FirstGrid = () => {
         const videoId = firstMovie?.trailerUrl?.split("v=")[1];
         setYoutube(videoId);
         console.log('Set YouTube video ID:', videoId);
+        
+        // Play ready sound and show ready message when data is fetched
+        playReadySound();
+        setReadyMessage("Found them!😀");
+        setTimeout(() => setReadyMessage(""), 3000); // Clear message after 3 seconds
       } else {
         console.log('No movies received from backend');
       }
@@ -133,11 +146,14 @@ const FirstGrid = () => {
     setText("");
     setAnimatedText("");
     setError("");
+    setReadyMessage("");
     // Reset context states to clear movies and YouTube video
     setMovies(null);
     setYoutube(null);
     // Reset gameStarted to false so doors are locked again.
     setGameStarted(false);
+    // Reset all doors
+    resetAllDoors();
   };
 
 
@@ -266,6 +282,11 @@ const FirstGrid = () => {
             {error && (
               <div className="cloud-bubble">
                 <p className="cloud-text">{error}</p>
+              </div>
+            )}
+            {readyMessage && (
+              <div className="cloud-bubble">
+                <p className="cloud-text">{readyMessage}</p>
               </div>
             )}
           </div>

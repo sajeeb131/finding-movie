@@ -255,60 +255,62 @@
   .cloud-bubble {
     position: absolute;
     /* Position the bubble to the right of the avatar */
-    top: 0;
+    top: 50%;
     right: 10px;
-    top: 20px;
-    /* Set the bubble’s min/max size */
-    min-width: 150px;
-    max-width: 220px;
+    transform: translateY(-50%) scale(0.8); /* Center vertically and set initial scale */
+    /* Set the bubble's min/max size - smaller for better responsiveness */
+    min-width: 100px;
+    max-width: 150px;
   
     /* Fancy gradient background */
     background: linear-gradient(135deg, #ffffff 0%, #f3f3f3 100%);
     
     /* Subtle border around the bubble */
-    border: 2px solid #dcdcdc;
-    border-radius: 30px;
+    border: 1px solid #dcdcdc;
+    border-radius: 20px;
   
-    /* Spacing & text styling */
-    padding: 15px 20px;
+    /* Spacing & text styling - smaller padding for compact size */
+    padding: 8px 12px;
     color: #333;
-    font-size: 1rem;
+    font-size: 0.875rem;
     
     /* Add a soft shadow behind the bubble */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   
     /* Animate the bubble appearing */
     animation: popIn 0.4s ease forwards;
-    transform: scale(0.8); /* initial scale for the popIn animation */
+    z-index: 20; /* Ensure it appears above other elements */
   
-    /* 
+    /*
       We use two pseudo-elements for a layered "tail" effect:
       - ::after matches the bubble's background
-      - ::before adds a slightly darker border behind it 
+      - ::before adds a slightly darker border behind it
     */
   
     &::after {
       content: "";
       position: absolute;
-      bottom: -15px; /* position the tail below the bubble */
-      left: 20px;    /* horizontal position of the tail */
+      left: -10px; /* Position tail on the left side */
+      top: 50%;
+      transform: translateY(-50%);
       width: 0;
       height: 0;
-      border: 15px solid transparent;
-      border-top-color: #f3f3f3; /* same as the gradient’s lighter color */
+      border: 10px solid transparent;
+      border-right-color: #f3f3f3; /* Pointing left */
       z-index: 1; /* ensure this tail is on top of the border tail */
     }
   
     &::before {
       content: "";
       position: absolute;
-      bottom: -17px;
-      left: 18px;
+      left: -12px; /* Slightly larger for border */
+      top: 50%;
+      transform: translateY(-50%);
       width: 0;
       height: 0;
-      border: 17px solid transparent;
-      border-top-color: #dcdcdc; /* matches the bubble’s border color */
-      z-index: 0; /* behind the bubble’s tail */
+      border: 12px solid transparent;
+      border-right-color: #dcdcdc; /* matches the bubble's border color */
+      z-index: 0; /* behind the bubble's tail */
     }
   }
   
@@ -321,14 +323,56 @@
   @keyframes popIn {
     0% {
       opacity: 0;
-      transform: scale(0.5);
+      transform: translateY(-50%) scale(0.5);
     }
     100% {
       opacity: 1;
-      transform: scale(0.8); /* final scale matches .cloud-bubble's initial transform */
+      transform: translateY(-50%) scale(0.8); /* final scale matches .cloud-bubble's initial transform */
     }
   }
   
+/* Cloud bubble responsive adjustments for high zoom levels */
+@media (min-resolution: 1.5dppx) {
+  .cloud-bubble {
+    min-width: 80px;
+    max-width: 120px;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    border-radius: 15px;
+    
+    &::after {
+      border-width: 8px;
+      left: -8px;
+    }
+    
+    &::before {
+      border-width: 10px;
+      left: -10px;
+    }
+  }
+}
+
+/* Extra high zoom level adjustments */
+@media (min-resolution: 2dppx) {
+  .cloud-bubble {
+    min-width: 70px;
+    max-width: 100px;
+    padding: 5px 8px;
+    font-size: 0.7rem;
+    border-radius: 12px;
+    
+    &::after {
+      border-width: 6px;
+      left: -6px;
+    }
+    
+    &::before {
+      border-width: 8px;
+      left: -8px;
+    }
+  }
+}
+
 /* Mobile-first responsive styles */
 @media (max-width: 640px) {
   .gc-1 {
@@ -417,6 +461,14 @@
       }
     }
   }
+  
+  .cloud-bubble {
+    min-width: 90px;
+    max-width: 130px;
+    padding: 7px 10px;
+    font-size: 0.8rem;
+    right: 5px;
+  }
 }
 
 @media (max-width: 440px) {
@@ -486,6 +538,14 @@
         font-size: 0.85rem;
       }
     }
+  }
+  
+  .cloud-bubble {
+    min-width: 80px;
+    max-width: 110px;
+    padding: 6px 8px;
+    font-size: 0.75rem;
+    right: 3px;
   }
   .g1-btm{
     width: 100%;
@@ -596,5 +656,24 @@
       min-height: 50px;
       padding: 0.5rem;
     }
+  }
+}
+@media (min-resolution: 1.5dppx) {
+  .g1-header{
+    padding-bottom: 0.8rem;
+  }
+  .g1-mid{
+    height: 50%;
+    padding: 0.8rem;
+  }
+  .g1-mid-tv{
+    min-height: 4.5rem;
+  }
+  .prompt-area{
+    min-height: 6rem;
+  }
+  .g1-btm{
+    width: 100%;
+    padding: 0.8rem;
   }
 }

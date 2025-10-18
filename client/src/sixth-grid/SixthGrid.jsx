@@ -26,7 +26,7 @@ const SixthGrid = () => {
   return (
     <div className='w-full h-full relative flex items-center justify-center gc-6'>
       <div className="flex flex-col items-center space-y-2 absolute g6-main">
-        <div className="flex flex-wrap justify-center gap-6 actor-container">
+        <div className="flex overflow-x-auto justify-start gap-6 actor-container scrollbar-hide">
           {actors.slice(0, 12).map((actor, index) => (
             <div
               key={actor.id || index}

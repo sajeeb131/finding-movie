@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 import "./Door.css";
 import { CiLock, CiUnlock } from "react-icons/ci";
 import { useMovieContext } from "../context/MovieContext";
 
-const Door = () => {
+const Door = forwardRef((props, ref) => {
   const [locked, setLocked] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const { gameStarted } = useMovieContext(); // Get global gameStarted state
+  
+  // Expose reset method to parent component
+  useImperativeHandle(ref, () => ({
+    reset: () => {
+      setLocked(true);
+      setIsOpen(false);
+    }
+  }));
 
   const handleUnlock = () => {
     // Only allow unlocking if the game has started
@@ -62,6 +70,8 @@ const Door = () => {
       )}
     </div>
   );
-};
+});
+
+Door.displayName = 'Door';
 
 export default Door;

@@ -77,12 +77,24 @@
   /* Avatar container animation */
 .actor-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
     gap: 12px;
     width: 100%;
     max-width: 100%;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 0;
+    scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
 }
   
   /* Avatar appearance animation */
@@ -90,6 +102,10 @@
     opacity: 0;
     transform: scale(0.8);
     animation: fadeInScale 0.4s ease forwards;
+    /* Ensure perfect circle at all zoom levels */
+    aspect-ratio: 1/1;
+    border-radius: 50% !important;
+    object-fit: cover;
   }
   
   /* Staggered animation for each avatar */
@@ -131,11 +147,14 @@
     gap: 8px;
     width: 100%;
     max-width: 100%;
+    padding: 5px 0;
   }
   
   .actor-avatar {
     width: 60px;
     height: 60px;
+    aspect-ratio: 1/1;
+    border-radius: 50% !important;
   }
   
   .modal-image {
@@ -153,11 +172,14 @@
 @media (max-width: 440px) {
   .actor-container {
     gap: 6px;
+    padding: 5px 0;
   }
   
   .actor-avatar {
     width: 50px;
     height: 50px;
+    aspect-ratio: 1/1;
+    border-radius: 50% !important;
   }
   
   .modal-image {
@@ -174,11 +196,14 @@
 @media (min-width: 641px) and (max-width: 768px) {
   .actor-container {
     gap: 10px;
+    padding: 8px 0;
   }
   
   .actor-avatar {
     width: 70px;
     height: 70px;
+    aspect-ratio: 1/1;
+    border-radius: 50% !important;
   }
 }
 
@@ -186,6 +211,7 @@
 @media (min-width: 769px) and (max-width: 1024px) {
   .actor-container {
     gap: 11px;
+    padding: 10px 0;
   }
   
   /* Base styles for g6-main container */
@@ -202,6 +228,8 @@
   .actor-avatar {
     width: 75px;
     height: 75px;
+    aspect-ratio: 1/1;
+    border-radius: 50% !important;
   }
 }
 
@@ -210,14 +238,16 @@
   .actor-container {
     gap: 12px;
     max-width: 100%;
-    justify-content: center;
+    justify-content: flex-start;
+    padding: 10px 0;
   }
   
   .actor-avatar {
     width: 80px;
     height: 80px;
     max-width: 100%;
-    height: auto;
+    aspect-ratio: 1/1;
+    border-radius: 50% !important;
   }
 }
 
@@ -225,11 +255,14 @@
 @media (min-width: 1441px) {
   .actor-container {
     gap: 14px;
+    padding: 12px 0;
   }
   
   .actor-avatar {
     width: 85px;
     height: 85px;
+    aspect-ratio: 1/1;
+    border-radius: 50% !important;
   }
 }
 
@@ -238,6 +271,8 @@
   .actor-avatar {
     min-width: 44px;
     min-height: 44px;
+    aspect-ratio: 1/1;
+    border-radius: 50% !important;
   }
   
   .actor-avatar:hover {
