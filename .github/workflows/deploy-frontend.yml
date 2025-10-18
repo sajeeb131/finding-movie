@@ -51,6 +51,3 @@ jobs:
           # GitHub integration
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-comment: false
-          
-          # Scope and alias
-          vercel-scope: ${{ secrets.VERCEL_ORG_ID }}
