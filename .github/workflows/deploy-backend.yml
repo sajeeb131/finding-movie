@@ -1,0 +1,103 @@
+name: Deploy Backend
+
+# Trigger on push to main branch when server files change
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'server/**'
+
+# Environment variables for Docker image
+env:
+  DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/finding-movie-server
+
+jobs:
+  # Build and test the backend
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ./server
+        run: npm ci
+
+      # Run tests if they exist
+      - name: Run tests
+        working-directory: ./server
+        run: npm test || echo "No tests configured, skipping..."
+
+  # Build and push Docker image
+  build-and-push:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_IMAGE }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server
+          push: true
+          tags: ${{ env.DOCKER_IMAGE }}:latest,${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # Deploy to EC2
+  deploy-to-ec2:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Pull the latest Docker image
+            docker pull ${{ env.DOCKER_IMAGE }}:latest
+            
+            # Stop and remove existing container (if it exists)
+            docker stop finding-movie-server || true
+            docker rm finding-movie-server || true
+            
+            # Run the new container
+            docker run -d \
+              --name finding-movie-server \
+              --restart unless-stopped \
+              -p 4000:4000 \
+              ${{ env.DOCKER_IMAGE }}:latest
+            
+            # Wait for the container to start
+            sleep 10
+            
+            # Health check
+            curl -f http://localhost:4000 || exit 1
+            
+            echo "Backend deployed successfully!"

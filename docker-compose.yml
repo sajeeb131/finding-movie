@@ -1,0 +1,39 @@
+version: '3.8'
+
+# Docker Compose for local development only
+# Remove version: '3.8' line
+
+services:
+  # Frontend service (React/Vite)
+  client:
+    image: node:20-alpine
+    container_name: finding-movie-client
+    working_dir: /app
+    volumes:
+      - ./client:/app
+      - client_node_modules:/app/node_modules  # Named volume
+    ports:
+      - "5173:5173"
+    environment:
+      - HOST=0.0.0.0
+    command: sh -c "npm install && npm run dev -- --host"
+    restart: unless-stopped
+
+  # Backend service (Node.js)
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: finding-movie-server
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./server/.env
+    restart: unless-stopped
+
+# THIS IS WHAT YOU'RE MISSING - Add this at the bottom:
+volumes:
+  client_node_modules:

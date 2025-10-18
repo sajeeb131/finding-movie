@@ -1,0 +1,53 @@
+name: Deploy Frontend
+
+# Trigger on push to main branch when client files change
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'client/**'
+
+jobs:
+  # Install and build the frontend
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ./client
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: ./client
+        run: npm run build
+
+  # Deploy to Vercel
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          # Vercel authentication
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          
+          # Deployment settings
+          vercel-args: '--prod'
+          working-directory: ./client
+          
+          # GitHub integration
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-comment: false
