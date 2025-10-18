@@ -21,6 +21,15 @@ app.use('/api', movieRoutes);
 // New AI-powered movie routes
 app.use('/api/ai', aiMovieRoutes);
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    message: 'Server is running',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Start the server
 const PORT =  process.env.PORT;
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
