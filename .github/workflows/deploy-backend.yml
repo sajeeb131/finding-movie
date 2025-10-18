@@ -92,6 +92,9 @@ jobs:
               --name finding-movie-server \
               --restart unless-stopped \
               -p 4000:4000 \
+              -e MONGODB_URI="mongodb+srv://finding-movie:nika@nodetutorials.amp8imj.mongodb.net/movie-finding?retryWrites=true&w=majority" \
+              -e PORT=4000 \
+              -e TMDB_API_KEY="20448842c6dda672a24bf844d65b2ff7" \
               ${{ env.DOCKER_IMAGE }}:latest
             
             # Wait for the container to start
